@@ -17,10 +17,23 @@ public class Motorista implements Serializable{
 	private String nome;
 	private String cpf;
 	private String carteira;
+	private String senha;
+	private String num_acesso;
 	
 	public Motorista() {
 	}
 
+	//Quando cria-se um novo motorista
+	public Motorista(String id, String nome, String cpf, String carteira, String senha, String num_acesso) {
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.carteira = carteira;
+		this.senha = senha;
+		this.num_acesso = num_acesso;
+	}
+	
+	//Quando se faz apenas uma consulta
 	public Motorista(String id, String nome, String cpf, String carteira) {
 		this.id = id;
 		this.nome = nome;
@@ -58,6 +71,22 @@ public class Motorista implements Serializable{
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getNum_acesso() {
+		return num_acesso;
+	}
+
+	public void setNum_acesso(String num_acesso) {
+		this.num_acesso = num_acesso;
 	}
 
 	@Override

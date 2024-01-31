@@ -23,6 +23,10 @@ public class MotoristaService {
 		return repo.findById(id).get();
 	}
 	
+	public Motorista findByLogin(String cpf, String senha) {
+		return repo.findByLogin(cpf, senha);
+	}
+	
 	public Motorista insert(Motorista obj) {
 		return repo.insert(obj);
 	}
