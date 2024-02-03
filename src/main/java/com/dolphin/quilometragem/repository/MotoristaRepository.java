@@ -9,12 +9,7 @@ import com.dolphin.quilometragem.domain.Motorista;
 @Repository
 public interface MotoristaRepository extends MongoRepository<Motorista, String>{
 
-	@Query("{ "
-			+ "$and: ["
-					+ " { 'cpf': ?0, }"
-					+ " { 'senha': ?1 } "
-				+ "]"
-			+ "}") 
+	@Query("{ $and: [ { 'cpf': ?0 },  { 'senha': ?1 } ] }") 
 	Motorista findByLogin(String cpf, String senha);
 	
 }

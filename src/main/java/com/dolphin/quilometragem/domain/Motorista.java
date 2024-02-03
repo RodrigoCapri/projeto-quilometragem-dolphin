@@ -20,6 +20,8 @@ public class Motorista implements Serializable{
 	private String senha;
 	private String num_acesso;
 	
+	private Carro carro;
+	
 	public Motorista() {
 	}
 
@@ -89,6 +91,14 @@ public class Motorista implements Serializable{
 		this.num_acesso = num_acesso;
 	}
 
+	public Carro getCarro() {
+		return carro;
+	}
+
+	public void setCarro(Carro carro) {
+		this.carro = carro;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -108,7 +118,8 @@ public class Motorista implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Motorista [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", carteira=" + carteira + "]";
+		return "Motorista [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", carteira=" + carteira + ", senha=" + senha
+				+ ", num_acesso=" + num_acesso + ", carro=" + carro + "]";
 	}
 	
 }
