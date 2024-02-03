@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dolphin.quilometragem.domain.Motorista;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
+import com.dolphin.quilometragem.dto.MotoristaLoginDTO;
 import com.dolphin.quilometragem.services.MotoristaService;
+import com.dolphin.quilometragem.services.exceptions.ObjectNotFoundException;
 
 @RestController
 @RequestMapping(value = "/motoristas")
@@ -73,12 +74,13 @@ public class MotoristaResource {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
-	public ResponseEntity<MotoristaDTO> findByLogin(
-			@RequestParam(value = "cpf") String cpf,
-			@RequestParam(value = "senha") String senha) {
-
-		Motorista obj = mot_service.findByLogin(cpf, senha);
-
-		return ResponseEntity.ok().body(new MotoristaDTO(obj));
+	public ResponseEntity< Motorista > findByLogin( @RequestBody MotoristaLoginDTO objDTO ) {
+		
+		Motorista obj = mot_service.findByLogin(objDTO.getCpf(), objDTO.getSenha());
+		if( obj == null ) {
+			throw new ObjectNotFoundException("Usuário não encontrado!");
+		}
+		
+		return ResponseEntity.ok().body(obj);
 	}
 }

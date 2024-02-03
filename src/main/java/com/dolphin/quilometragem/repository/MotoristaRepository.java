@@ -11,8 +11,8 @@ public interface MotoristaRepository extends MongoRepository<Motorista, String>{
 
 	@Query("{ "
 			+ "$and: ["
-					+ " { 'cpf': { $regex: ?0 } }, "
-					+ " { 'senha': { $regex: ?1 } } "
+					+ " { 'cpf': ?0, }"
+					+ " { 'senha': ?1 } "
 				+ "]"
 			+ "}") 
 	Motorista findByLogin(String cpf, String senha);
