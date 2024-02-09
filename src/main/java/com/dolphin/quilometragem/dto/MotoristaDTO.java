@@ -2,7 +2,6 @@ package com.dolphin.quilometragem.dto;
 
 import java.io.Serializable;
 
-import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Motorista;
 
 public class MotoristaDTO implements Serializable {
@@ -13,8 +12,6 @@ public class MotoristaDTO implements Serializable {
 	private String nome;
 	private String cpf;
 	private String carteira;
-	
-	private Carro carro;
 
 	public MotoristaDTO() {
 		
@@ -25,7 +22,6 @@ public class MotoristaDTO implements Serializable {
 		this.nome = mot.getNome();
 		this.cpf = mot.getCpf();
 		this.carteira = mot.getCarteira();
-		this.carro = mot.getCarro();
 	}
 
 	public String getId() {
@@ -58,14 +54,6 @@ public class MotoristaDTO implements Serializable {
 
 	public void setCarteira(String carteira) {
 		this.carteira = carteira;
-	}
-
-	public Carro getCarro() {
-		return carro;
-	}
-
-	public void setCarro(Carro carro) {
-		this.carro = carro;
 	}
 	
 }

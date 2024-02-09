@@ -8,6 +8,9 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.dolphin.quilometragem.dto.MotoristaDTO;
+import com.dolphin.quilometragem.dto.QuilometragemDTO;
+
 @Document(collection = "carro")
 public class Carro implements Serializable{
 
@@ -23,20 +26,21 @@ public class Carro implements Serializable{
 	
 	private List<String> observacoes = new ArrayList<>();
 	
-	//@DBRef (lazy = true) //Para não carregar automaticamente os posts quando recuperar um usuário
-	//private Motorista motorista;
+	private List<QuilometragemDTO> quilometragem = new ArrayList<>();
+	
+	private MotoristaDTO motorista;
 	
 	public Carro() {
 	}
 
-	public Carro(String id, String modelo, String ano, String cor, String placa, Motorista motorista, List<String> observacoes) {
+	public Carro(String id, String modelo, String ano, String cor, String placa, MotoristaDTO motorista, List<String> observacoes) {
 		this.id = id;
 		this.modelo = modelo;
 		this.ano = ano;
 		this.cor = cor;
 		this.placa = placa;
 		this.observacoes = observacoes;
-		//this.motorista = motorista;
+		this.motorista = motorista;
 	}
 	
 	public Carro(String id, String modelo, String ano, String cor, String placa, List<String> observacoes) {
@@ -88,14 +92,6 @@ public class Carro implements Serializable{
 		this.placa = placa;
 	}
 
-	public List<String> getObservations() {
-		return observacoes;
-	}
-
-	public void setObservations(List<String> observations) {
-		this.observacoes = observations;
-	}
-
 	public List<String> getObservacoes() {
 		return observacoes;
 	}
@@ -104,13 +100,21 @@ public class Carro implements Serializable{
 		this.observacoes = observacoes;
 	}
 
-//	public Motorista getMotorista() {
-//		return motorista;
-//	}
-//
-//	public void setMotorista(Motorista motorista) {
-//		this.motorista = motorista;
-//	}
+	public MotoristaDTO getMotorista() {
+		return motorista;
+	}
+
+	public void setMotorista(MotoristaDTO motorista) {
+		this.motorista = motorista;
+	}
+
+	public List<QuilometragemDTO> getQuilometragem() {
+		return quilometragem;
+	}
+
+	public void setQuilometragem(List<QuilometragemDTO> quilometragem) {
+		this.quilometragem = quilometragem;
+	}
 
 	@Override
 	public int hashCode() {
@@ -132,7 +136,8 @@ public class Carro implements Serializable{
 	@Override
 	public String toString() {
 		return "Carro [id=" + id + ", modelo=" + modelo + ", ano=" + ano + ", cor=" + cor + ", placa=" + placa
-				+ ", observations=" + observacoes + "]";
+				+ ", observacoes=" + observacoes + ", quilometragem=" + quilometragem + ", motorista=" + motorista
+				+ "]";
 	}
 	
 }

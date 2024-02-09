@@ -20,10 +20,26 @@ public class Motorista implements Serializable{
 	private String senha;
 	private String num_acesso;
 	
+	//@DBRef (lazy = true) //Para não carregar automaticamente os posts quando recuperar um usuário
 	private Carro carro;
 	
 	public Motorista() {
 	}
+	
+	
+
+	public Motorista(String id, String nome, String cpf, String carteira, String senha, String num_acesso,
+			Carro carro) {
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.carteira = carteira;
+		this.senha = senha;
+		this.num_acesso = num_acesso;
+		this.carro = carro;
+	}
+
+
 
 	//Quando cria-se um novo motorista
 	public Motorista(String id, String nome, String cpf, String carteira, String senha, String num_acesso) {
