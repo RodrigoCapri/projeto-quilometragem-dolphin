@@ -1,5 +1,7 @@
 package com.dolphin.quilometragem.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,6 @@ import com.dolphin.quilometragem.domain.Motorista;
 public interface MotoristaRepository extends MongoRepository<Motorista, String>{
 
 	@Query("{ $and: [ { 'cpf': ?0 },  { 'senha': ?1 } ] }") 
-	Motorista findByLogin(String cpf, String senha);
+	Optional<Motorista> findByLogin(String cpf, String senha);
 	
 }

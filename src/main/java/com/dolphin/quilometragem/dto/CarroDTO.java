@@ -1,14 +1,24 @@
 package com.dolphin.quilometragem.dto;
 
+import java.io.Serializable;
+
 import com.dolphin.quilometragem.domain.Carro;
 
-public class CarroDTO {
+public class CarroDTO implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private String id;
 	private String modelo;
 	private String ano;
 	private String cor;
 	private String placa;
+	
+	private String motorista;
+	
+	public CarroDTO() {
+		
+	}
 	
 	public CarroDTO( Carro obj ) {
 		this.id = obj.getId();
@@ -16,6 +26,7 @@ public class CarroDTO {
 		this.ano = obj.getAno();
 		this.cor = obj.getCor();
 		this.placa = obj.getPlaca();
+		this.motorista = obj.getMotorista() != null ? obj.getMotorista().getId() : null;
 	}
 
 	public String getId() {
@@ -58,11 +69,12 @@ public class CarroDTO {
 		this.placa = placa;
 	}
 
-	@Override
-	public String toString() {
-		return "CarroDTO [id=" + id + ", modelo=" + modelo + ", ano=" + ano + ", cor=" + cor + ", placa=" + placa + "]";
+	public String getMotorista() {
+		return motorista;
 	}
 
-	
+	public void setMotorista(String motorista) {
+		this.motorista = motorista;
+	}
 	
 }

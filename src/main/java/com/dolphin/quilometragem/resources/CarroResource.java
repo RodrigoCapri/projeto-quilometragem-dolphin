@@ -2,6 +2,7 @@ package com.dolphin.quilometragem.resources;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dolphin.quilometragem.domain.Carro;
+import com.dolphin.quilometragem.domain.Registro;
 import com.dolphin.quilometragem.dto.CarroDTO;
-import com.dolphin.quilometragem.dto.QuilometragemDTO;
+import com.dolphin.quilometragem.dto.RegistroDTO;
+import com.dolphin.quilometragem.resources.util.URL;
 import com.dolphin.quilometragem.services.CarroService;
 
 @RestController
@@ -32,24 +36,24 @@ public class CarroResource {
 		
 		List<CarroDTO> listDTO = new ArrayList<>();
 		
-		for( Carro car : list ) {
-			listDTO.add(new CarroDTO(car));
-		}
+		//Para cada objeto na lista carro, adiciona o mesmo na lista CarroDTO
+		list.forEach( (n) -> listDTO.add(new CarroDTO(n)) );
 
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-	public ResponseEntity< Carro > findById(@PathVariable String id) {
+	public ResponseEntity< CarroDTO > findById(@PathVariable String id) {
 
 		Carro obj = service.findById(id);
 
-		return ResponseEntity.ok().body(obj);
+		return ResponseEntity.ok().body(new CarroDTO(obj));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity< Void > insert(@RequestBody Carro obj) {
+	public ResponseEntity< Void > insert(@RequestBody CarroDTO objDTO) {
 		
+		Carro obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 
 		// Pegar o endereço do novo objeto inserido
@@ -69,34 +73,37 @@ public class CarroResource {
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity< Void > delete(@PathVariable String id) {
+		
 		service.delete(id);
 
 		return ResponseEntity.noContent().build();
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/odometros")
-	public ResponseEntity< Void > insertRegistroOdometro(@PathVariable String id, @RequestBody QuilometragemDTO quilometragem ){
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registros")
+	public ResponseEntity< List<RegistroDTO> > findAllRegistros(@PathVariable String id){
 		
 		Carro car = service.findById(id);
+		List<Registro> list = car.getRegistros();
+		List<RegistroDTO> listDTO = new ArrayList<>();
+		list.forEach( element -> listDTO.add(new RegistroDTO(element)) );
 		
-		List<QuilometragemDTO> list = car.getQuilometragem();
-		list.add(quilometragem);
-		
-		car.setQuilometragem(list);
-		
-		service.update(car);
-		
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().body(listDTO);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/odometros")
-	public ResponseEntity< List<QuilometragemDTO> > findAllOdometros(@PathVariable String id){
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/search")
+	public ResponseEntity< List<RegistroDTO> > searchRegistros(@PathVariable String id,
+			@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "minDate", defaultValue = "") String minDate,
+			@RequestParam(value = "maxDate", defaultValue = "") String maxDate){
 		
-		Carro car = service.findById(id);
+		text = URL.decodeParam(text);
+		Date min = URL.convertDate(minDate, new Date(0L)); //Date minima existente
+		Date max = URL.convertDate(maxDate, new Date());  //Data atual da maquina
 		
-		List<QuilometragemDTO> list = car.getQuilometragem();
+		List<RegistroDTO> list = service.searchRegistros(id, text, min, max);
 		
 		return ResponseEntity.ok().body(list);
 	}
+	
 	
 }

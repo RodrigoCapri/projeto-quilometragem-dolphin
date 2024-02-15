@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.dolphin.quilometragem.dto.MotoristaDTO;
-import com.dolphin.quilometragem.dto.QuilometragemDTO;
 
 @Document(collection = "carro")
 public class Carro implements Serializable{
@@ -24,32 +24,29 @@ public class Carro implements Serializable{
 	private String cor;
 	private String placa;
 	
+	private MotoristaDTO motorista = new MotoristaDTO();
+	
 	private List<String> observacoes = new ArrayList<>();
 	
-	private List<QuilometragemDTO> quilometragem = new ArrayList<>();
-	
-	private MotoristaDTO motorista;
+	@DBRef(lazy = true)
+	private List<Registro> registros = new ArrayList<>();
 	
 	public Carro() {
 	}
-
-	public Carro(String id, String modelo, String ano, String cor, String placa, MotoristaDTO motorista, List<String> observacoes) {
+	
+	public Carro(String id, String modelo, String ano, String cor, String placa) {
 		this.id = id;
 		this.modelo = modelo;
 		this.ano = ano;
 		this.cor = cor;
 		this.placa = placa;
-		this.observacoes = observacoes;
-		this.motorista = motorista;
 	}
 	
-	public Carro(String id, String modelo, String ano, String cor, String placa, List<String> observacoes) {
-		this.id = id;
+	public Carro(String modelo, String ano, String cor, String placa) {
 		this.modelo = modelo;
 		this.ano = ano;
 		this.cor = cor;
 		this.placa = placa;
-		this.observacoes = observacoes;
 	}
 
 	public String getId() {
@@ -108,12 +105,12 @@ public class Carro implements Serializable{
 		this.motorista = motorista;
 	}
 
-	public List<QuilometragemDTO> getQuilometragem() {
-		return quilometragem;
+	public List<Registro> getRegistros() {
+		return registros;
 	}
 
-	public void setQuilometragem(List<QuilometragemDTO> quilometragem) {
-		this.quilometragem = quilometragem;
+	public void setRegistros(List<Registro> registros) {
+		this.registros = registros;
 	}
 
 	@Override
@@ -136,8 +133,7 @@ public class Carro implements Serializable{
 	@Override
 	public String toString() {
 		return "Carro [id=" + id + ", modelo=" + modelo + ", ano=" + ano + ", cor=" + cor + ", placa=" + placa
-				+ ", observacoes=" + observacoes + ", quilometragem=" + quilometragem + ", motorista=" + motorista
-				+ "]";
+				+ ", motorista=" + motorista + ", observacoes=" + observacoes + ", registros=" + registros + "]";
 	}
 	
 }

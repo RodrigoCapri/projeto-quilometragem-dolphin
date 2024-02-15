@@ -10,52 +10,72 @@ import org.springframework.context.annotation.Configuration;
 
 import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Motorista;
+import com.dolphin.quilometragem.domain.Registro;
+import com.dolphin.quilometragem.dto.CarroDTO;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
-import com.dolphin.quilometragem.dto.QuilometragemDTO;
 import com.dolphin.quilometragem.repository.CarroRepository;
 import com.dolphin.quilometragem.repository.MotoristaRepository;
+import com.dolphin.quilometragem.repository.RegistroRepository;
 
 //Classe de configuração inicial para execução de testes na base de dados
 
 @Configuration
-public class Instantiation implements CommandLineRunner{
+public class Instantiation implements CommandLineRunner {
 
 	@Autowired
 	private MotoristaRepository moto_repo;
-	
+
 	@Autowired
 	private CarroRepository carro_repo;
-	
+
+	@Autowired
+	private RegistroRepository registro_repo;
+
 	@Override
 	public void run(String... args) throws Exception {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		
+
 		moto_repo.deleteAll();
 		carro_repo.deleteAll();
-		
-		//Aplicando novos motoristas na base de dados
-		Motorista mot1 = new Motorista(null, "Alex Many", "00022233344", "147258369", "1234", "0");
-		Motorista mot2 = new Motorista(null, "Debora Manta", "4443332221100", "369258147", "3322", "0");
-		Motorista mot3 = new Motorista(null, "Everton Sabre", "11199988877", "789456123", "7733", "0");
+		registro_repo.deleteAll();
 
+		// Aplicando novos motoristas na base de dados
+		Motorista mot1 = new Motorista("Alex Many", "alex@gmail.com", "00033344481", "45678912", "1100");
+		Motorista mot2 = new Motorista("Debora Manta", "debora@gmail.com", "99988834512", "32165455", "7958");
+		Motorista mot3 = new Motorista("Everton Sabre", "everton@gmail.com", "14725896302", "96385211", "1532");
 		moto_repo.saveAll(Arrays.asList(mot1, mot2, mot3));
-		
-		Carro car1 = new Carro(null, "UNO", "2010", "VERMELHO", "AB0036", new MotoristaDTO(mot1), null);
-		Carro car2 = new Carro(null, "UNO", "2012", "BRANCO", "AL4416", new MotoristaDTO(mot3), null);
-		
-		car1.getQuilometragem().add(new QuilometragemDTO("3302", "Para casa", sdf.parse("21/12/2023")));
-		car1.getQuilometragem().add(new QuilometragemDTO("3310", "Empresa", sdf.parse("22/12/2023")));
-		car1.getQuilometragem().add(new QuilometragemDTO("3350", "Buscar EPEis", sdf.parse("23/12/2023")));
-		
+
+		// Aplicando carros na base de dados
+		Carro car1 = new Carro(null, "UNO", "2010", "VERMELHO", "AB0036");
+		Carro car2 = new Carro(null, "UNO", "2012", "BRANCO", "AL4416");
 		carro_repo.saveAll(Arrays.asList(car1, car2));
-		
+
+		// Associando um carro ao motorista
 		mot1.setCarro(car1);
 		mot3.setCarro(car2);
+		moto_repo.saveAll(Arrays.asList(mot1, mot3));
+
+		// Aplicando registro na base de dados
+		Registro reg1 = new Registro("203415", "Maltaria", sdf.parse("09/12/2023"), new CarroDTO(car1),
+				new MotoristaDTO(mot1));
+		Registro reg2 = new Registro("203415", "Para casa", sdf.parse("10/12/2023"), new CarroDTO(car1),
+				new MotoristaDTO(mot1));
+		Registro reg3 = new Registro("203415", "Buscar colaboradores", sdf.parse("11/12/2023"), new CarroDTO(car1),
+				new MotoristaDTO(mot1));
+		registro_repo.saveAll(Arrays.asList(reg1, reg2, reg3));
+
+		// Associando um motorista ao carro
+		car1.setMotorista(new MotoristaDTO(mot1));
+		car2.setMotorista(new MotoristaDTO(mot3));
+		// Associando registros ao carro
+		car1.setRegistros(Arrays.asList(reg1, reg2, reg3));
+		carro_repo.saveAll(Arrays.asList(car1, car2));
 		
-		moto_repo.saveAll(Arrays.asList(mot1, mot2, mot3));
-		
+		mot1.setRegistros(Arrays.asList(reg1, reg2, reg3));
+		moto_repo.save(mot1);
+
 	}
 
 }

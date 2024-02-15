@@ -1,9 +1,12 @@
 package com.dolphin.quilometragem.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "motorista")
@@ -15,49 +18,32 @@ public class Motorista implements Serializable{
 	private String id;
 	
 	private String nome;
+	private String email;
 	private String cpf;
 	private String carteira;
 	private String senha;
+	
 	private String num_acesso;
 	
-	//@DBRef (lazy = true) //Para não carregar automaticamente os posts quando recuperar um usuário
+	@DBRef
 	private Carro carro;
+	
+	@DBRef(lazy = true)
+	private List<Registro> registros = new ArrayList<>();
 	
 	public Motorista() {
 	}
-	
-	
 
-	public Motorista(String id, String nome, String cpf, String carteira, String senha, String num_acesso,
-			Carro carro) {
-		this.id = id;
+	public Motorista(String nome, String email, String cpf, String carteira, String senha) {
 		this.nome = nome;
+		this.email = email;
 		this.cpf = cpf;
 		this.carteira = carteira;
 		this.senha = senha;
-		this.num_acesso = num_acesso;
-		this.carro = carro;
+		this.num_acesso = "0";
 	}
 
 
-
-	//Quando cria-se um novo motorista
-	public Motorista(String id, String nome, String cpf, String carteira, String senha, String num_acesso) {
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.carteira = carteira;
-		this.senha = senha;
-		this.num_acesso = num_acesso;
-	}
-	
-	//Quando se faz apenas uma consulta
-	public Motorista(String id, String nome, String cpf, String carteira) {
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.carteira = carteira;
-	}
 
 	public String getNome() {
 		return nome;
@@ -115,6 +101,21 @@ public class Motorista implements Serializable{
 		this.carro = carro;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public List<Registro> getRegistros() {
+		return registros;
+	}
+
+	public void setRegistros(List<Registro> registros) {
+		this.registros = registros;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -134,8 +135,9 @@ public class Motorista implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Motorista [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", carteira=" + carteira + ", senha=" + senha
-				+ ", num_acesso=" + num_acesso + ", carro=" + carro + "]";
+		return "Motorista [id=" + id + ", nome=" + nome + ", email=" + email + ", cpf=" + cpf + ", carteira=" + carteira
+				+ ", senha=" + senha + ", num_acesso=" + num_acesso + ", carro=" + carro + ", registros=" + registros
+				+ "]";
 	}
 	
 }
