@@ -20,6 +20,7 @@ public class Registro implements Serializable{
 	
 	private String odometro;
 	private String destino;
+	private String observation;
 	private Date horario;
 	
 	private CarroDTO carro;
@@ -28,28 +29,18 @@ public class Registro implements Serializable{
 	public Registro() {
 	}
 
-	public Registro(String id, String odometro, String destino, Date horario, CarroDTO carro, MotoristaDTO motorista) {
+	public Registro(String id, String odometro, String destino, String observation, Date horario, CarroDTO carro,
+			MotoristaDTO motorista) {
 		this.id = id;
 		this.odometro = odometro;
 		this.destino = destino;
+		this.observation = observation;
 		this.horario = horario;
 		this.carro = carro;
 		this.motorista = motorista;
 	}
 
-	public Registro(String odometro, String destino, Date horario, CarroDTO carro, MotoristaDTO motorista) {
-		this.odometro = odometro;
-		this.destino = destino;
-		this.horario = horario;
-		this.carro = carro;
-		this.motorista = motorista;
-	}
 
-	public Registro(String odometro, String destino, Date horario) {
-		this.odometro = odometro;
-		this.destino = destino;
-		this.horario = horario;
-	}
 
 	public String getId() {
 		return id;
@@ -98,6 +89,13 @@ public class Registro implements Serializable{
 	public void setMotorista(MotoristaDTO motorista) {
 		this.motorista = motorista;
 	}
+	public String getObservation() {
+		return observation;
+	}
+
+	public void setObservation(String observation) {
+		this.observation = observation;
+	}
 
 	@Override
 	public int hashCode() {
@@ -118,8 +116,8 @@ public class Registro implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Registro [id=" + id + ", odometro=" + odometro + ", destino=" + destino + ", horario=" + horario
-				+ ", carro=" + carro + ", motorista=" + motorista + "]";
+		return "Registro [id=" + id + ", odometro=" + odometro + ", destino=" + destino + ", observation=" + observation
+				+ ", horario=" + horario + ", carro=" + carro + ", motorista=" + motorista + "]";
 	}
 	
 }

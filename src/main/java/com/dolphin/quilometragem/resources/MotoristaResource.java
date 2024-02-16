@@ -51,9 +51,8 @@ public class MotoristaResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody MotoristaDTO objDTO) {
+	public ResponseEntity<Void> insert(@RequestBody Motorista obj) {
 		
-		Motorista obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 
 		// Pegar o endereço do novo objeto inserido
@@ -110,15 +109,15 @@ public class MotoristaResource {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/search")
 	public ResponseEntity< List<RegistroDTO> > searchRegistros(@PathVariable String id,
-			@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "destino", defaultValue = "") String destino,
 			@RequestParam(value = "minDate", defaultValue = "") String minDate,
 			@RequestParam(value = "maxDate", defaultValue = "") String maxDate){
 		
-		text = URL.decodeParam(text);
+		destino = URL.decodeParam(destino);
 		Date min = URL.convertDate(minDate, new Date(0L)); //Date minima existente
 		Date max = URL.convertDate(maxDate, new Date());  //Data atual da maquina
 		
-		List<RegistroDTO> list = service.searchRegistros(id, text, min, max);
+		List<RegistroDTO> list = service.searchRegistros(id, destino, min, max);
 		
 		return ResponseEntity.ok().body(list);
 	}

@@ -63,8 +63,10 @@ public class CarroResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}") // Para atualizar um registro
-	public ResponseEntity< Void > update(@PathVariable String id, @RequestBody Carro obj) { // Casar o atributo com a requisição
-
+	public ResponseEntity< Void > update(@PathVariable String id, @RequestBody CarroDTO objDTO) { // Casar o atributo com a requisição
+		
+		Carro obj = service.fromDTO(objDTO);
+		
 		obj.setId(id);
 		obj = service.update(obj);
 
@@ -92,15 +94,15 @@ public class CarroResource {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/search")
 	public ResponseEntity< List<RegistroDTO> > searchRegistros(@PathVariable String id,
-			@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "destino", defaultValue = "") String destino,
 			@RequestParam(value = "minDate", defaultValue = "") String minDate,
 			@RequestParam(value = "maxDate", defaultValue = "") String maxDate){
 		
-		text = URL.decodeParam(text);
+		destino = URL.decodeParam(destino);
 		Date min = URL.convertDate(minDate, new Date(0L)); //Date minima existente
 		Date max = URL.convertDate(maxDate, new Date());  //Data atual da maquina
 		
-		List<RegistroDTO> list = service.searchRegistros(id, text, min, max);
+		List<RegistroDTO> list = service.searchRegistros(id, destino, min, max);
 		
 		return ResponseEntity.ok().body(list);
 	}

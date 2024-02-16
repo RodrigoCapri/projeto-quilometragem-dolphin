@@ -12,6 +12,7 @@ public class RegistroDTO implements Serializable{
 	private String id;
 	private String odometro;
 	private String destino;
+	private String observation;
 	private Date horario;
 	
 	//Id carro
@@ -26,6 +27,7 @@ public class RegistroDTO implements Serializable{
 		this.id = obj.getId();
 		this.odometro = obj.getOdometro();
 		this.destino = obj.getDestino();
+		this.observation = obj.getObservation();
 		this.horario = obj.getHorario();
 		this.carro = obj.getCarro().getId();
 		this.motorista = obj.getMotorista().getId();
@@ -77,6 +79,14 @@ public class RegistroDTO implements Serializable{
 
 	public void setMotorista(String motorista) {
 		this.motorista = motorista;
+	}
+
+	public String getObservation() {
+		return observation;
+	}
+
+	public void setObservation(String observation) {
+		this.observation = observation;
 	}
 	
 }

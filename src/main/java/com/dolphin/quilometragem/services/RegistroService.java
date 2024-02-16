@@ -1,8 +1,10 @@
 package com.dolphin.quilometragem.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,11 +68,12 @@ public class RegistroService {
 		List<Registro> list = new ArrayList<>();
 		Registro regAnt = null;
 
-		newReg.setDestino(obj.getDestino());
-		newReg.setHorario(obj.getHorario());
-		newReg.setOdometro(obj.getOdometro());
-		newReg.setCarro(obj.getCarro());
-		newReg.setMotorista(obj.getMotorista());
+		newReg.setDestino(obj.getDestino() != null ? obj.getDestino() : newReg.getDestino());
+		newReg.setObservation(obj.getObservation() != null ? obj.getObservation() : newReg.getDestino());
+		newReg.setHorario(obj.getHorario() != null ? obj.getHorario() : newReg.getHorario());
+		newReg.setOdometro(obj.getOdometro() != null ? obj.getOdometro() : newReg.getOdometro());
+		newReg.setCarro(obj.getCarro() != null ? obj.getCarro() : newReg.getCarro());
+		newReg.setMotorista(obj.getMotorista() != null ? obj.getMotorista() : newReg.getMotorista());
 
 		// Atualizando o registro no Carro
 		// Pega o carro segundo o id especificado no Registro
@@ -116,11 +119,41 @@ public class RegistroService {
 		
 		repo.delete(registro);
 	}
+	
+	public List<RegistroDTO> searchRegistros(String text, Date min, Date max) {
+		
+		List<Registro> list = repo.searchRegistros(text, min, max);
+		
+		List<RegistroDTO> listDTO = new ArrayList<>();
+		list.forEach( element -> listDTO.add(new RegistroDTO(element)) );
+		
+		return listDTO;
+	}
+	
+	public List<RegistroDTO> findByMotorista(String id){
+		
+		List<Registro> list = repo.findByMotorista(id);
+		
+		//Transforma os elemtentos Registro em RegistroDTO
+		List<RegistroDTO> listDTO = list.stream().map( element -> new RegistroDTO(element) ).collect(Collectors.toList());
+		
+		return listDTO;
+	}
+	
+	public List<RegistroDTO> findByCarro(String id){
+		
+		List<Registro> list = repo.findByCarro(id);
+		
+		//Transforma os elemtentos Registro em RegistroDTO
+		List<RegistroDTO> listDTO = list.stream().map( element -> new RegistroDTO(element) ).collect(Collectors.toList());
+		
+		return listDTO;
+	}
 
 	public Registro fromDTO(RegistroDTO objDTO) {
 		MotoristaDTO mot = new MotoristaDTO(mot_repo.findById(objDTO.getMotorista()).get());
 		CarroDTO car = new CarroDTO(car_repo.findById(objDTO.getCarro()).get());
-		return new Registro(objDTO.getId(), objDTO.getOdometro(), objDTO.getDestino(), objDTO.getHorario(), car, mot);
+		return new Registro(objDTO.getId(), objDTO.getOdometro(), objDTO.getDestino(), objDTO.getObservation(), objDTO.getHorario(), car, mot);
 	}
 
 }

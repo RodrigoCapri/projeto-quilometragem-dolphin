@@ -11,10 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dolphin.quilometragem.domain.Carro;
+import com.dolphin.quilometragem.domain.Motorista;
 import com.dolphin.quilometragem.domain.Registro;
 import com.dolphin.quilometragem.dto.CarroDTO;
+import com.dolphin.quilometragem.dto.MotoristaDTO;
 import com.dolphin.quilometragem.dto.RegistroDTO;
 import com.dolphin.quilometragem.repository.CarroRepository;
+import com.dolphin.quilometragem.repository.MotoristaRepository;
+import com.dolphin.quilometragem.services.exceptions.InvalidAssociation;
 import com.dolphin.quilometragem.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -22,6 +26,9 @@ public class CarroService{
 
 	@Autowired
 	private CarroRepository repo;
+	
+	@Autowired
+	private MotoristaRepository mot_repo;
 	
 	
 	public List< Carro > findAll(){
@@ -34,18 +41,39 @@ public class CarroService{
 	}
 	
 	public Carro insert( Carro obj ) {
-		return repo.insert(obj);
+		
+		Carro new_carro = repo.insert(obj);
+		
+		if(new_carro.getMotorista() != null) {
+			Motorista mot = mot_repo.findById(new_carro.getMotorista().getId()).get();
+			if( mot.getCarro() != null ) {
+				throw new InvalidAssociation("Não pode associar mais de um motorista num carro!");
+			}
+			mot.setCarro(new_carro);
+			mot_repo.save(mot);
+		}
+		
+		return new_carro;
 	}
 	
 	public Carro update( Carro obj ) {
 		Carro carNew = repo.findById(obj.getId()).orElseThrow( () -> new ObjectNotFoundException(obj.getId()) );
 		
-		carNew.setModelo( obj.getModelo() );
-		carNew.setAno( obj.getAno() );
-		carNew.setCor( obj.getCor() );
-		carNew.setMotorista( obj.getMotorista() );
-		carNew.setObservacoes( obj.getObservacoes() );
-		carNew.setRegistros( obj.getRegistros() );	
+		carNew.setModelo( obj.getModelo() != null ? obj.getModelo() : carNew.getModelo() );
+		carNew.setAno( obj.getAno() != null ? obj.getAno() : carNew.getAno() );
+		carNew.setCor( obj.getCor() != null ? obj.getCor() : carNew.getCor());
+		carNew.setMotorista( obj.getMotorista() != null ? obj.getMotorista() : carNew.getMotorista() );
+		carNew.setRegistros( obj.getRegistros() != null ? obj.getRegistros() : carNew.getRegistros());	
+		
+		//Atualiza a coleção Motorista
+		if( carNew.getMotorista().getId() != null ) {
+			Motorista mot = mot_repo.findById(carNew.getMotorista().getId()).get();
+			if( mot.getCarro() != null ) {
+				throw new InvalidAssociation("Não pode associar mais de um motorista num carro!");
+			}
+			mot.setCarro(carNew);
+			mot_repo.save(mot);
+		}
 
 		return repo.save(carNew);
 	}
@@ -75,7 +103,12 @@ public class CarroService{
 	}
 	
 	public Carro fromDTO( CarroDTO objDTO ) {
-		return new Carro(objDTO.getId(), objDTO.getModelo(), objDTO.getAno(), objDTO.getCor(), objDTO.getPlaca());
+		MotoristaDTO mot = null;
+		
+		if(objDTO.getMotorista() != null)
+			mot = new MotoristaDTO(mot_repo.findById(objDTO.getMotorista()).get());
+			
+		return new Carro(objDTO.getId(), objDTO.getModelo(), objDTO.getAno(), objDTO.getCor(), objDTO.getPlaca(), mot);
 	}
 	
 }

@@ -26,27 +26,19 @@ public class Carro implements Serializable{
 	
 	private MotoristaDTO motorista = new MotoristaDTO();
 	
-	private List<String> observacoes = new ArrayList<>();
-	
 	@DBRef(lazy = true)
 	private List<Registro> registros = new ArrayList<>();
 	
 	public Carro() {
 	}
-	
-	public Carro(String id, String modelo, String ano, String cor, String placa) {
+
+	public Carro(String id, String modelo, String ano, String cor, String placa, MotoristaDTO motorista) {
 		this.id = id;
 		this.modelo = modelo;
 		this.ano = ano;
 		this.cor = cor;
 		this.placa = placa;
-	}
-	
-	public Carro(String modelo, String ano, String cor, String placa) {
-		this.modelo = modelo;
-		this.ano = ano;
-		this.cor = cor;
-		this.placa = placa;
+		this.motorista = motorista;
 	}
 
 	public String getId() {
@@ -89,14 +81,6 @@ public class Carro implements Serializable{
 		this.placa = placa;
 	}
 
-	public List<String> getObservacoes() {
-		return observacoes;
-	}
-
-	public void setObservacoes(List<String> observacoes) {
-		this.observacoes = observacoes;
-	}
-
 	public MotoristaDTO getMotorista() {
 		return motorista;
 	}
@@ -133,7 +117,7 @@ public class Carro implements Serializable{
 	@Override
 	public String toString() {
 		return "Carro [id=" + id + ", modelo=" + modelo + ", ano=" + ano + ", cor=" + cor + ", placa=" + placa
-				+ ", motorista=" + motorista + ", observacoes=" + observacoes + ", registros=" + registros + "]";
+				+ ", motorista=" + motorista + ", registros=" + registros + "]";
 	}
 	
 }

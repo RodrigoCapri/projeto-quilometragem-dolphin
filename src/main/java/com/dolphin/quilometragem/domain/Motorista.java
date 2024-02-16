@@ -21,9 +21,9 @@ public class Motorista implements Serializable{
 	private String email;
 	private String cpf;
 	private String carteira;
-	private String senha;
+	private String senha = "root";
 	
-	private String num_acesso;
+	private Integer num_acesso = 0;
 	
 	@DBRef
 	private Carro carro;
@@ -34,13 +34,18 @@ public class Motorista implements Serializable{
 	public Motorista() {
 	}
 
-	public Motorista(String nome, String email, String cpf, String carteira, String senha) {
+	
+
+	public Motorista(String id, String nome, String email, String cpf, String carteira, String senha, Integer num_acesso,
+			Carro carro) {
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
 		this.carteira = carteira;
-		this.senha = senha;
-		this.num_acesso = "0";
+		this.senha = senha != null ? senha : this.senha;
+		this.num_acesso = num_acesso != null ? num_acesso : this.num_acesso;
+		this.carro = carro;
 	}
 
 
@@ -85,11 +90,11 @@ public class Motorista implements Serializable{
 		this.senha = senha;
 	}
 
-	public String getNum_acesso() {
+	public Integer getNum_acesso() {
 		return num_acesso;
 	}
 
-	public void setNum_acesso(String num_acesso) {
+	public void setNum_acesso(Integer num_acesso) {
 		this.num_acesso = num_acesso;
 	}
 

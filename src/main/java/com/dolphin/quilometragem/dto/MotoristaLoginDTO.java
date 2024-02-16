@@ -8,10 +8,12 @@ public class MotoristaLoginDTO implements Serializable{
 	
 	private String cpf;
 	private String senha;
+	private Integer num_acesso;
 	
-	public MotoristaLoginDTO(String cpf, String senha) {
+	public MotoristaLoginDTO(String cpf, String senha, Integer num_acesso) {
 		this.cpf = cpf;
 		this.senha = senha;
+		this.num_acesso = num_acesso;
 	}
 
 	public String getCpf() {
@@ -30,9 +32,12 @@ public class MotoristaLoginDTO implements Serializable{
 		this.senha = senha;
 	}
 
-	@Override
-	public String toString() {
-		return "MotoristaLoginDTO [cpf=" + cpf + ", senha=" + senha + "]";
+	public Integer getNum_acesso() {
+		return num_acesso;
+	}
+
+	public void setNum_acesso(Integer num_acesso) {
+		this.num_acesso = num_acesso;
 	}
 
 }
