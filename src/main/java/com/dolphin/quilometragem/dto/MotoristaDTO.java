@@ -11,6 +11,7 @@ public class MotoristaDTO implements Serializable {
 	private String id;
 	private String nome;
 	private String email;
+	private String telefone;
 	private String cpf;
 	private String carteira;
 	
@@ -24,6 +25,7 @@ public class MotoristaDTO implements Serializable {
 		this.id = mot.getId();
 		this.nome = mot.getNome();
 		this.email = mot.getEmail();
+		this.telefone = mot.getTelefone();
 		this.cpf = mot.getCpf();
 		this.carteira = mot.getCarteira();
 		this.carro = mot.getCarro() != null ? mot.getCarro().getId() : null;
@@ -75,6 +77,14 @@ public class MotoristaDTO implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 	
 }

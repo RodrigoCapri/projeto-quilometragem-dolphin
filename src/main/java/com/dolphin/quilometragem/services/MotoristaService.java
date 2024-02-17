@@ -65,6 +65,7 @@ public class MotoristaService {
 		
 		newObj.setNome(obj.getNome() != null ? obj.getNome() : newObj.getNome());
 		newObj.setEmail(obj.getEmail() != null ? obj.getEmail() : newObj.getEmail());
+		newObj.setTelefone(obj.getTelefone() != null ? obj.getTelefone() : newObj.getTelefone());
 		newObj.setCpf(obj.getCpf() != null ? obj.getCpf() : newObj.getCpf());
 		newObj.setCarteira(obj.getCarteira() != null ? obj.getCarteira() : newObj.getCarteira());
 		newObj.setCarro(obj.getCarro() != null ? obj.getCarro() : newObj.getCarro());
@@ -119,7 +120,7 @@ public class MotoristaService {
 		if( objDTO.getCarro() != null )
 			car = car_repo.findById(objDTO.getCarro()).get();
 		
-		return new Motorista(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getCpf(), objDTO.getCarteira(), null, null , car);
+		return new Motorista(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getTelefone(), objDTO.getCpf(), objDTO.getCarteira(), null, null , car);
 	}
 	
 }

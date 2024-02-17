@@ -19,6 +19,7 @@ public class Motorista implements Serializable{
 	
 	private String nome;
 	private String email;
+	private String telefone;
 	private String cpf;
 	private String carteira;
 	private String senha = "root";
@@ -36,11 +37,12 @@ public class Motorista implements Serializable{
 
 	
 
-	public Motorista(String id, String nome, String email, String cpf, String carteira, String senha, Integer num_acesso,
+	public Motorista(String id, String nome, String email, String telefone, String cpf, String carteira, String senha, Integer num_acesso,
 			Carro carro) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
+		this.telefone = telefone;
 		this.cpf = cpf;
 		this.carteira = carteira;
 		this.senha = senha != null ? senha : this.senha;
@@ -113,6 +115,15 @@ public class Motorista implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
 	public List<Registro> getRegistros() {
 		return registros;
 	}
