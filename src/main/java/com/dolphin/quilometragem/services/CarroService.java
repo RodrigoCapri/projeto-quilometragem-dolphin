@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Motorista;
 import com.dolphin.quilometragem.domain.Registro;
+import com.dolphin.quilometragem.domain.enums.CarColor;
 import com.dolphin.quilometragem.dto.CarroDTO;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
 import com.dolphin.quilometragem.dto.RegistroDTO;
@@ -100,6 +101,23 @@ public class CarroService{
 		list.forEach( element -> listDTO.add(new RegistroDTO(element)) );
 		
 		return listDTO;
+	}
+	
+	public MotoristaDTO findMotorista(String id) {
+		Carro car = repo.findById(id).orElseThrow( () -> new ObjectNotFoundException(id) );
+		
+		if( car.getMotorista() == null )
+			throw new ObjectNotFoundException("Motorista não encontrado para este carro "+car.getId());
+		
+		return car.getMotorista();
+	}
+	
+	public List<CarColor> getCores(){
+		List<CarColor> list = new ArrayList<>();
+		for( CarColor cor : CarColor.values() ) {
+			list.add(cor);
+		}
+		return list;
 	}
 	
 	public Carro fromDTO( CarroDTO objDTO ) {

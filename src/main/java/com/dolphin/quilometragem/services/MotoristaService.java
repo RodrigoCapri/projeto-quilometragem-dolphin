@@ -114,6 +114,14 @@ public class MotoristaService {
 		return listDTO;
 	}
 	
+	public Carro findCarro(String id) {
+		Motorista mot = repo.findById(id).orElseThrow( () -> new ObjectNotFoundException(id) );
+		if( mot.getCarro() == null ) {
+			throw new ObjectNotFoundException("Carro não encontrado para este motorista "+id);
+		}
+		return mot.getCarro();
+	}
+	
 	public Motorista fromDTO(MotoristaDTO objDTO) {
 		Carro car = null;
 		

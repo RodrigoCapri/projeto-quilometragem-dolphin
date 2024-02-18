@@ -3,6 +3,7 @@ package com.dolphin.quilometragem.dto;
 import java.io.Serializable;
 
 import com.dolphin.quilometragem.domain.Carro;
+import com.dolphin.quilometragem.domain.enums.CarColor;
 
 public class CarroDTO implements Serializable{
 
@@ -11,7 +12,7 @@ public class CarroDTO implements Serializable{
 	private String id;
 	private String modelo;
 	private String ano;
-	private String cor;
+	private Integer cor;
 	private String placa;
 	
 	private String motorista;
@@ -24,7 +25,7 @@ public class CarroDTO implements Serializable{
 		this.id = obj.getId();
 		this.modelo = obj.getModelo();
 		this.ano = obj.getAno();
-		this.cor = obj.getCor();
+		this.setCor(obj.getCor());
 		this.placa = obj.getPlaca();
 		this.motorista = obj.getMotorista() != null ? obj.getMotorista().getId() : null;
 	}
@@ -53,12 +54,14 @@ public class CarroDTO implements Serializable{
 		this.ano = ano;
 	}
 
-	public String getCor() {
-		return cor;
+	public CarColor getCor() {
+		return CarColor.valueOf(this.cor);
 	}
 
-	public void setCor(String cor) {
-		this.cor = cor;
+	public void setCor(CarColor cor) {
+		if( cor != null ) {
+			this.cor = cor.getCode();
+		}
 	}
 
 	public String getPlaca() {

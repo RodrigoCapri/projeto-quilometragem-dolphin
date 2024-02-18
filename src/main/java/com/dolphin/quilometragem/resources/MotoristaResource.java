@@ -7,16 +7,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Motorista;
 import com.dolphin.quilometragem.domain.Registro;
+import com.dolphin.quilometragem.dto.CarroDTO;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
 import com.dolphin.quilometragem.dto.MotoristaLoginDTO;
 import com.dolphin.quilometragem.dto.RegistroDTO;
@@ -30,7 +35,7 @@ public class MotoristaResource {
 	@Autowired // Instancia automaticamente o objeto
 	private MotoristaService service;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ResponseEntity< List<MotoristaDTO> > findAll() {
 
 		List<Motorista> list = service.findAll();
@@ -42,7 +47,7 @@ public class MotoristaResource {
 		return ResponseEntity.ok().body(listDTO);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity< MotoristaDTO > findById(@PathVariable String id) {
 
 		Motorista obj = service.findById(id);
@@ -50,7 +55,7 @@ public class MotoristaResource {
 		return ResponseEntity.ok().body(new MotoristaDTO(obj));
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public ResponseEntity<Void> insert(@RequestBody Motorista obj) {
 		
 		obj = service.insert(obj);
@@ -61,7 +66,7 @@ public class MotoristaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}") // Para atualizar um registro
+	@PutMapping("/{id}") // Para atualizar um registro
 	public ResponseEntity<Void> update(@PathVariable String id, @RequestBody MotoristaDTO objDTO) { // Casar o atributo com a requisição
 
 		Motorista obj = service.fromDTO(objDTO);
@@ -72,7 +77,7 @@ public class MotoristaResource {
 		return ResponseEntity.noContent().build(); // 204 no content, não retorna nada
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		
 		service.delete(id);
@@ -80,7 +85,7 @@ public class MotoristaResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/login")
+	@GetMapping("/login")
 	public ResponseEntity< Motorista > findByLogin( @RequestBody MotoristaLoginDTO objDTO ) {
 		
 		Motorista obj = service.findByLogin(objDTO);
@@ -88,7 +93,7 @@ public class MotoristaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/login")
+	@PutMapping("/login")
 	public ResponseEntity< Void > updateLogin( @RequestBody MotoristaLoginDTO objDTO ) {
 		
 		service.updateLogin(objDTO);
@@ -96,7 +101,7 @@ public class MotoristaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registros")
+	@GetMapping("/{id}/registros")
 	public ResponseEntity< List<RegistroDTO> > findAllRegistros(@PathVariable String id){
 		
 		Motorista mot = service.findById(id);
@@ -107,7 +112,7 @@ public class MotoristaResource {
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/search")
+	@GetMapping("/{id}/search")
 	public ResponseEntity< List<RegistroDTO> > searchRegistros(@PathVariable String id,
 			@RequestParam(value = "destino", defaultValue = "") String destino,
 			@RequestParam(value = "minDate", defaultValue = "") String minDate,
@@ -120,6 +125,13 @@ public class MotoristaResource {
 		List<RegistroDTO> list = service.searchRegistros(id, destino, min, max);
 		
 		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping("/{id}/carro")
+	public ResponseEntity< CarroDTO > findCarro(@PathVariable String id){
+		Carro car = service.findCarro(id);
+		
+		return ResponseEntity.ok().body( new CarroDTO(car) );
 	}
 	
 }

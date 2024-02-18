@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.dolphin.quilometragem.domain.enums.CarColor;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
 
 @Document(collection = "carro")
@@ -21,10 +22,10 @@ public class Carro implements Serializable{
 	
 	private String modelo;
 	private String ano;
-	private String cor;
+	private Integer cor;
 	private String placa;
 	
-	private MotoristaDTO motorista = new MotoristaDTO();
+	private MotoristaDTO motorista;
 	
 	@DBRef(lazy = true)
 	private List<Registro> registros = new ArrayList<>();
@@ -32,11 +33,11 @@ public class Carro implements Serializable{
 	public Carro() {
 	}
 
-	public Carro(String id, String modelo, String ano, String cor, String placa, MotoristaDTO motorista) {
+	public Carro(String id, String modelo, String ano, CarColor cor, String placa, MotoristaDTO motorista) {
 		this.id = id;
 		this.modelo = modelo;
 		this.ano = ano;
-		this.cor = cor;
+		this.setCor(cor);
 		this.placa = placa;
 		this.motorista = motorista;
 	}
@@ -65,12 +66,14 @@ public class Carro implements Serializable{
 		this.ano = ano;
 	}
 
-	public String getCor() {
-		return cor;
+	public CarColor getCor() {
+		return CarColor.valueOf(this.cor);
 	}
 
-	public void setCor(String cor) {
-		this.cor = cor;
+	public void setCor(CarColor cor) {
+		if( cor != null ) {
+			this.cor = cor.getCode();
+		}
 	}
 
 	public String getPlaca() {
@@ -96,7 +99,7 @@ public class Carro implements Serializable{
 	public void setRegistros(List<Registro> registros) {
 		this.registros = registros;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

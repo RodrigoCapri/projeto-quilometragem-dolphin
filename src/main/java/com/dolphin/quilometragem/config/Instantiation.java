@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Motorista;
 import com.dolphin.quilometragem.domain.Registro;
+import com.dolphin.quilometragem.domain.enums.CarColor;
 import com.dolphin.quilometragem.dto.CarroDTO;
 import com.dolphin.quilometragem.dto.MotoristaDTO;
 import com.dolphin.quilometragem.repository.CarroRepository;
@@ -48,8 +49,8 @@ public class Instantiation implements CommandLineRunner {
 		moto_repo.saveAll(Arrays.asList(mot1, mot2, mot3));
 
 		// Aplicando carros na base de dados
-		Carro car1 = new Carro(null, "UNO", "2010", "VERMELHO", "AB0036", null);
-		Carro car2 = new Carro(null, "UNO", "2012", "BRANCO", "AL4416", null);
+		Carro car1 = new Carro(null, "UNO", "2010", CarColor.BRANCO, "AB0036", null);
+		Carro car2 = new Carro(null, "UNO", "2012", CarColor.PRETO, "AL4416", null);
 		carro_repo.saveAll(Arrays.asList(car1, car2));
 
 		// Associando um carro ao motorista

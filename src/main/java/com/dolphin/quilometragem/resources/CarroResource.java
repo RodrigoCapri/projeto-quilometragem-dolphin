@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dolphin.quilometragem.domain.Carro;
 import com.dolphin.quilometragem.domain.Registro;
+import com.dolphin.quilometragem.domain.enums.CarColor;
 import com.dolphin.quilometragem.dto.CarroDTO;
+import com.dolphin.quilometragem.dto.MotoristaDTO;
 import com.dolphin.quilometragem.dto.RegistroDTO;
 import com.dolphin.quilometragem.resources.util.URL;
 import com.dolphin.quilometragem.services.CarroService;
@@ -107,5 +110,19 @@ public class CarroResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@GetMapping("/{id}/motorista")
+	public ResponseEntity< MotoristaDTO > findMotorista(@PathVariable String id){
+		
+		MotoristaDTO motDTO = service.findMotorista(id);
+		
+		return ResponseEntity.ok().body(motDTO);
+	}
+	
+	@GetMapping("/cores")
+	public ResponseEntity< List<CarColor> > getCores(){
+		List<CarColor> list = service.getCores();
+		
+		return ResponseEntity.ok().body(list);
+	}
 	
 }
